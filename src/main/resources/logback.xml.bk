@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="LOG_HOME" value="/home/jihe/develop/IdeaProjects/nature-data-import/" />
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        　　　<file>/home/jihe/develop/IdeaProjects/nature-data-import/testFile2.log</file>
+        　　　　　 <encoder><!-- 必须指定，否则不会往文件输出内容 -->
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+    </encoder>
+        <append>true</append>
+        <prudent>false</prudent>
+    </appender>
+
+    <!-- 日志输出级别 -->
+    <root level="DEBUG">
+        <appender-ref ref="fileAppender" />
+    </root>
+</configuration>
