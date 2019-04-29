@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.cnebula.nature.entity.Configuration;
 import com.cnebula.nature.util.DruidUtil;
+import com.cnebula.nature.util.ExtractZipUtil;
 import com.cnebula.nature.util.PropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +28,28 @@ public class AppMain {
         log.info("Main thread begin to start for 'Nature data importing tool'");
         String userDir = System.getProperty("user.dir");
         log.info("Begin to read configuration file from file system: " + userDir);
-        File file = new File(userDir + File.separator + "config.properties");
+        File file = null;
+        try {
+            file = new File(userDir + File.separator + "config.properties");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Fail to read config.properties, caused: " + e.getLocalizedMessage(), e);
+        }
         FileInputStream fileInputStream = new FileInputStream(file);
         Properties properties = new Properties();
         properties.load(fileInputStream);
 
         // =========Store configuration to internal inner memory===========
         Configuration configuration = new Configuration(properties);
+
+        try {
+            ExtractZipUtil.unZip(properties.getProperty("zipFileDir"), properties.getProperty("pdfBaseDir"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Error to parse zip, caused: " + e.getLocalizedMessage(), e);
+        }
+
+
 
 
        /* DruidDataSource ds = DruidUtil.createDruidConnectionPool(PropertiesUtil.getProperties());
@@ -55,7 +71,7 @@ public class AppMain {
             e.printStackTrace();
         }
 */
-
+        log.info("=======================================Success=======================================");
         log.info("=======================================End=======================================");
     }
 }

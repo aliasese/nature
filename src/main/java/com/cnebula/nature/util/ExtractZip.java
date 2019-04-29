@@ -1,26 +1,20 @@
 package com.cnebula.nature.util;
 
 import com.cnebula.nature.ThreadTask.ParseXMLRunableImpl;
+import com.cnebula.nature.dto.Article;
 import com.cnebula.nature.entity.FileNameEntity;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -108,9 +102,7 @@ public class ExtractZip {
 
         // Parse XML then check duplication of Article
         for (List<String> fileNameIssue:fileNames){
-            for (String fileName:fileNameIssue) {
-                threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileName));
-            }
+            //threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue));
         }
 
         threadPoolExecutor.shutdown();
@@ -124,7 +116,7 @@ public class ExtractZip {
      * @return 返回 zip 压缩文件里的文件名的 list
      * @throws Exception
      */
-    public static List<String> unZip(File zipFile, String destDir) throws Exception {
+    /*public static List<String> unZip(File zipFile, String destDir) throws Exception {
         // 如果 destDir 为 null, 空字符串, 或者全是空格, 则解压到压缩文件所在目录
         if (StringUtils.isBlank(destDir)) {
             destDir = zipFile.getParent();
@@ -154,8 +146,8 @@ public class ExtractZip {
                 }
                 //ips.
                 //entry.getExtra();
-                /*File file = new File(destDir, entry.);
-                if ()*/
+                *//*File file = new File(destDir, entry.);
+                if ()*//*
 
                 if (entry.isDirectory()) {
                     File directory = new File(destDir, entry.getName());
@@ -180,7 +172,7 @@ public class ExtractZip {
         }
 
         return fileNames;
-    }
+    }*/
 
     /**
      * 解压 zip 文件
@@ -198,6 +190,8 @@ public class ExtractZip {
     public static void main(String[] args) throws Exception {
         unZip("/home/jihe/developFiles/nature/ftp_PUB_19-04-06_05-50-17.zip", "/home/jihe/developFiles/nature");
         //System.out.println(names);
+        Article article = new Article();
+        //article.
     }
 
     /*public static void main(String[] args) throws Exception {

@@ -1,0 +1,459 @@
+{
+  "ArticleSet": {
+    "Article": [
+      {
+        "FirstPage": 199,
+        "Language": "EN",
+        "Abstract": "",
+        "AuthorList": {
+          "Author": {
+            "FirstName": "Kristy",
+            "LastName": "Turner",
+            "AffiliationInfo": [
+              {
+                "Affiliation": "School of Chemistry, University of Manchester, Manchester, UK. kristy.turner@manchester.ac.uk"
+              },
+              {
+                "Affiliation": "Bolton, School Boys\u2019 Division, Bolton, UK. kristy.turner@manchester.ac.uk"
+              }
+            ]
+          }
+        },
+        "ArticleTitle": "Anatomy of an exam question",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0086-2",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0086-2",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 200
+      },
+      {
+        "FirstPage": 203,
+        "Language": "EN",
+        "Abstract": "",
+        "AuthorList": {
+          "Author": {
+            "FirstName": "David",
+            "LastName": "Schilter",
+            "AffiliationInfo": {
+              "Affiliation": "Nature Reviews Chemistry, . David.schilter@nature.com"
+            }
+          }
+        },
+        "ArticleTitle": "Thiolate gates superoxo states",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0089-z",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0089-z",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 203
+      },
+      {
+        "FirstPage": 202,
+        "Language": "EN",
+        "Abstract": "",
+        "AuthorList": {
+          "Author": {
+            "FirstName": "Stephen",
+            "LastName": "Davey",
+            "MiddleName": "G.",
+            "AffiliationInfo": {
+              "Affiliation": "Nature Reviews Chemistry, . natrevchem@nature.com"
+            }
+          }
+        },
+        "ArticleTitle": "Coupling aryls at the anode",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0090-6",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0090-6",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 202
+      },
+      {
+        "FirstPage": 223,
+        "Language": "EN",
+        "Abstract": "Ethanol is presently the most common liquid fuel derived from biomass. One way of meeting the growing demand for heavier middle-distillate fuels \u2014 diesel and jet fuels comprising hydrocarbons of typically 8\u201322 carbon atoms \u2014 is to derive these from ethanol. This Review describes the chemistries and processes involved in the conversion of ethanol into diesel and jet fuel drop-in replacements and blendstocks. This conversion of ethanol relies on reactions including dehydration (to olefins), dehydrogenation (to aldehydes), hydrogenation (of C=C and C=O bonds), acid-catalysed olefin oligomerization, metal-catalysed olefin oligomerization, aldolization and ketonization. We discuss the thermodynamics, kinetics, process integration and catalyst development of different approaches. Some routes, particularly those based on olefin oligomerization, have been realized on the pilot scale. Other routes are currently in laboratory stages. This Review provides a framework for understanding how to convert ethanol into distillate-range molecules and the key research problems to be addressed.",
+        "PublicationType": "Review",
+        "AuthorList": {
+          "Author": [
+            {
+              "FirstName": "Nathaniel",
+              "LastName": "Eagan",
+              "MiddleName": "M.",
+              "AffiliationInfo": {
+                "Affiliation": "University of Wisconsin, Madison, WI, USA"
+              }
+            },
+            {
+              "FirstName": "Mrunmayi",
+              "LastName": "Kumbhalkar",
+              "MiddleName": "D.",
+              "AffiliationInfo": {
+                "Affiliation": "University of Wisconsin, Madison, WI, USA"
+              }
+            },
+            {
+              "FirstName": "J.",
+              "LastName": "Buchanan",
+              "MiddleName": "Scott",
+              "AffiliationInfo": {
+                "Affiliation": "ExxonMobil Research and Engineering, Annandale, NJ, USA"
+              }
+            },
+            {
+              "FirstName": "James",
+              "LastName": "Dumesic",
+              "MiddleName": "A.",
+              "AffiliationInfo": {
+                "Affiliation": "University of Wisconsin, Madison, WI, USA"
+              }
+            },
+            {
+              "FirstName": "George",
+              "LastName": "Huber",
+              "MiddleName": "W.",
+              "AffiliationInfo": {
+                "Affiliation": "University of Wisconsin, Madison, WI, USA. gwhuber@wisc.edu"
+              }
+            }
+          ]
+        },
+        "ArticleTitle": "Chemistries and processes for the conversion of ethanol into middle-distillate fuels",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0084-4",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0084-4",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 249
+      },
+      {
+        "FirstPage": 204,
+        "Language": "EN",
+        "Abstract": "The binding of multiple guests by a single entity can lead to new modes of host\u2013guest interactions and thus new applications in, for example, catalysis and sensing. With the aim of developing modular systems that can promote and adapt to allosteric binding events, this Review explores current strategies used to bind multiple guests in the central and peripheral environments of coordination cages. The structural and functional consequences of multi-guest binding are examined, highlighting the methods by which guest configurations involving more than one copy of the same guest, as well as multiple different guests, may be designed. We thus aim to provide new methodological insights and tools into the design of new capsules for multiple guest-specific binding events, towards the development of guest\u2013guest chemistry within synthetic systems.",
+        "PublicationType": "Review",
+        "AuthorList": {
+          "Author": [
+            {
+              "FirstName": "Felix",
+              "LastName": "Rizzuto",
+              "MiddleName": "J.",
+              "AffiliationInfo": {
+                "Affiliation": "Department of Chemistry, University of Cambridge, Cambridge, UK"
+              }
+            },
+            {
+              "FirstName": "Larissa",
+              "LastName": "von Krbek",
+              "MiddleName": "K. S.",
+              "AffiliationInfo": {
+                "Affiliation": "Department of Chemistry, University of Cambridge, Cambridge, UK"
+              }
+            },
+            {
+              "FirstName": "Jonathan",
+              "LastName": "Nitschke",
+              "MiddleName": "R.",
+              "AffiliationInfo": {
+                "Affiliation": "Department of Chemistry, University of Cambridge, Cambridge, UK. jrn34@cam.ac.uk"
+              }
+            }
+          ]
+        },
+        "ArticleTitle": "Strategies for binding multiple guests in metal\u2013organic cages",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0085-3",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0085-3",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 222
+      },
+      {
+        "FirstPage": 201,
+        "Language": "EN",
+        "Abstract": "",
+        "AuthorList": {
+          "Author": {
+            "FirstName": "Gabriella",
+            "LastName": "Graziano",
+            "AffiliationInfo": {
+              "Affiliation": "Nature Reviews Chemistry, . natrevchem@nature.com"
+            }
+          }
+        },
+        "ArticleTitle": "An optical baton",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0091-5",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0091-5",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 201
+      },
+      {
+        "FirstPage": 250,
+        "Language": "EN",
+        "Abstract": "The electron\u2019s spin is essential to the stability of matter, and control over the spin opens up avenues for manipulating the properties of molecules and materials. The Pauli exclusion principle requires that two electrons in a single spatial eigenstate have opposite spins, and this fact dictates basic features of atomic states and chemical bond formation. The energy associated with interacting electron clouds changes with their relative spin orientation, and by manipulating the spin directions, one can guide chemical transformations. However, controlling the relative spin orientation of electrons located on two reactants (atoms, molecules or surfaces) has proved challenging. Recent developments based on the chiral-induced spin selectivity (CISS) effect show that the spin orientation is linked to molecular symmetry and can be controlled in ways not previously imagined. For example, the combination of chiral molecules and electron spin opens up a new approach to (enantio)selective chemistry. This Review describes the theoretical concepts underlying the CISS effect and illustrates its importance by discussing some of its manifestations in chemistry, biology and physics. Specifically, we discuss how the CISS effect allows for efficient long-range electron transfer in chiral molecules and how it affects biorecognition processes. Several applications of the effect are presented, and the importance of controlling relative spin orientations in multi-electron processes, such as electrochemical water splitting, is emphasized. We describe the enantiospecific interaction between ferromagnetic substrates and chiral molecules and how it enables the separation of enantiomers with ferromagnets. Lastly, we discuss the relevance of CISS effects to biological electron transfer, enantioselectivity and CISS-based spintronics applications.",
+        "PublicationType": "Review",
+        "AuthorList": {
+          "Author": [
+            {
+              "Identifier": {
+                "Source": "ORCID",
+                "content": "http://orcid.org/0000-0003-1910-366X"
+              },
+              "FirstName": "Ron",
+              "LastName": "Naaman",
+              "AffiliationInfo": {
+                "Affiliation": "Department of Chemical and Biological Physics, Weizmann Institute, Rehovot, Israel. ron.naaman@weizmann.ac.il"
+              }
+            },
+            {
+              "Identifier": {
+                "Source": "ORCID",
+                "content": "http://orcid.org/0000-0002-8739-9952"
+              },
+              "FirstName": "Yossi",
+              "LastName": "Paltiel",
+              "AffiliationInfo": {
+                "Affiliation": "Department of Applied Physics, The Hebrew University, Jerusalem, Israel"
+              }
+            },
+            {
+              "Identifier": {
+                "Source": "ORCID",
+                "content": "http://orcid.org/0000-0003-2982-0929"
+              },
+              "FirstName": "David",
+              "LastName": "Waldeck",
+              "MiddleName": "H.",
+              "AffiliationInfo": {
+                "Affiliation": "Department of Chemistry, University of Pittsburgh, Pittsburgh, PA, USA"
+              }
+            }
+          ]
+        },
+        "ArticleTitle": "Chiral molecules and the electron spin",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0087-1",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0087-1",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 260
+      },
+      {
+        "FirstPage": 261,
+        "Language": "EN",
+        "Abstract": {
+          "inf": 2,
+          "content": [
+            "Some Ru complexes have extremely promising anticancer or antibacterial properties, but the poor H",
+            "O solubility and/or low stability of many Ru complexes in aqueous solution under physiological conditions and/or metabolic or biodistribution profiles prevent their therapeutic use. To overcome these drawbacks, various strategies have been developed to improve the delivery of these compounds to their target tissues. The first strategy is based on physical encapsulation of Ru complexes in carriers, such as polymeric micelles, microparticles, nanoparticles and polymer\u2013lipid hybrids, which enables the delivery and controlled release of the active Ru drug candidate. The second strategy involves covalent conjugation of the Ru complex to a polymer to give a prodrug that can be converted into the active drug at a more controllable rate. In this Review, we provide an overview of recent developments in polymer encapsulation of Ru complexes for biological and medicinal applications. We place particular emphasis on how polymer structure affects Ru delivery."
+          ]
+        },
+        "PublicationType": "Review",
+        "AuthorList": {
+          "Author": [
+            {
+              "FirstName": "Elise",
+              "LastName": "Villemin",
+              "AffiliationInfo": [
+                {
+                  "Affiliation": "Chimie ParisTech, PSL University, Centre National de la Recherche Scientifique (CNRS), Institut de Recherche de Chimie Paris, Paris, France"
+                },
+                {
+                  "Affiliation": "Chimie ParisTech, PSL University, Centre National de la Recherche Scientifique (CNRS), Institute of Chemistry for Life and Health Sciences, Laboratory for Inorganic Chemical Biology, Paris, France"
+                }
+              ]
+            },
+            {
+              "FirstName": "Yih",
+              "LastName": "Ong",
+              "MiddleName": "Ching",
+              "AffiliationInfo": {
+                "Affiliation": "Chimie ParisTech, PSL University, Centre National de la Recherche Scientifique (CNRS), Institute of Chemistry for Life and Health Sciences, Laboratory for Inorganic Chemical Biology, Paris, France"
+              }
+            },
+            {
+              "FirstName": "Christophe",
+              "LastName": "Thomas",
+              "MiddleName": "M.",
+              "AffiliationInfo": {
+                "Affiliation": "Chimie ParisTech, PSL University, Centre National de la Recherche Scientifique (CNRS), Institut de Recherche de Chimie Paris, Paris, France. christophe.thomas@chimieparistech.psl.eu"
+              }
+            },
+            {
+              "Identifier": {
+                "Source": "ORCID",
+                "content": "http://orcid.org/0000-0002-4244-5097"
+              },
+              "FirstName": "Gilles",
+              "LastName": "Gasser",
+              "AffiliationInfo": {
+                "Affiliation": "Chimie ParisTech, PSL University, Centre National de la Recherche Scientifique (CNRS), Institute of Chemistry for Life and Health Sciences, Laboratory for Inorganic Chemical Biology, Paris, France. gilles.gasser@chimieparistech.psl.eu"
+              }
+            }
+          ]
+        },
+        "ArticleTitle": "Polymer encapsulation of ruthenium complexes for biological and medicinal applications",
+        "Journal": {
+          "Issue": 4,
+          "Volume": 3,
+          "PubDate": {
+            "Month": 4,
+            "Year": 2019,
+            "PubStatus": "ppublish"
+          },
+          "JournalTitle": "Nat Rev Chem",
+          "PublisherName": "Nature Publishing Group UK",
+          "Issn": "2397-3358"
+        },
+        "ArticleIdList": {
+          "ArticleId": [
+            {
+              "content": "10.1038/s41570-019-0088-0",
+              "IdType": "doi"
+            },
+            {
+              "content": "10.1038/s41570-019-0088-0",
+              "IdType": "pii"
+            }
+          ]
+        },
+        "LastPage": 282
+      }
+    ]
+  }
+}
