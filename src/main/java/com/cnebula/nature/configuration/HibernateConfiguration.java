@@ -1,6 +1,9 @@
 package com.cnebula.nature.configuration;
 
+import com.cnebula.nature.dto.Affiliation;
 import com.cnebula.nature.dto.Article;
+import com.cnebula.nature.dto.AuthAff;
+import com.cnebula.nature.dto.Author;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -42,6 +45,9 @@ public class HibernateConfiguration {
         //1.加载hibernate.cfg.xml配置
         Configuration config=new Configuration().setProperties(properties)
                 //.addPackage("com.houshenglory.hibernate.dto")
+                .addAnnotatedClass(Author.class)
+                .addAnnotatedClass(AuthAff.class)
+                .addAnnotatedClass(Affiliation.class)
                 .addAnnotatedClass(Article.class);
         //2.获取SessionFactory
         return config.buildSessionFactory();

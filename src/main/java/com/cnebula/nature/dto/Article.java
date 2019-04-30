@@ -1,9 +1,7 @@
 package com.cnebula.nature.dto;
 
 import org.apache.commons.lang3.StringUtils;
-
 import javax.persistence.*;
-import java.text.ParseException;
 
 @Entity
 @Table(name = "nature.dbo.content")
@@ -12,20 +10,20 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "artid", nullable = false)
-    private Integer artid;
+    private Integer artid; //Primary key
 
 
     @Column(name = "pips", nullable = true)
-    private String pips; //全文文件名称
+    private String pips; //全文文件名称,即pdf扩展后缀名.之前的名称
 
     @Column(name = "pii", nullable = true, insertable = false, updatable = false)
-    private String pii;
+    private String pii; // 电子资源唯一标示
 
     @Column(name = "pii", nullable = true)
-    private String doi;
+    private String doi; // 电子资源唯一标示
 
     @Column(name = "pnm", nullable = true)
-    private String publisherName; //出版社
+    private String publisherName; //出版社名称
 
     @Column(name = "jtl", nullable = false)
     private String journalTitle; //期刊名称
@@ -40,10 +38,10 @@ public class Article {
     private String jabt; //期刊排序名称
 
     @Column(name = "issn9", nullable = true)
-    private String issn9;
+    private String issn9; // issn
 
     @Column(name = "issn8", nullable = true)
-    private String issn8;
+    private String issn8; // issn8 去掉中间横杠
 
     @Column(name = "vid", nullable = false)
     private String volume; //卷号
@@ -104,6 +102,194 @@ public class Article {
 
     }
 
+    public Integer getArtid() {
+        return artid;
+    }
+
+    public void setArtid(Integer artid) {
+        this.artid = artid;
+    }
+
+    public String getPips() {
+        return pips;
+    }
+
+    public void setPips(String pips) {
+        this.pips = pips;
+    }
+
+    public String getPii() {
+        return pii;
+    }
+
+    public void setPii(String pii) {
+        this.pii = pii;
+    }
+
+    public String getDoi() {
+        return doi;
+    }
+
+    public void setDoi(String doi) {
+        this.doi = doi;
+    }
+
+    public String getPublisherName() {
+        return publisherName;
+    }
+
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
+    }
+
+    public void setJtlSort(String jtlSort) {
+        this.jtlSort = jtlSort;
+    }
+
+    public void setJtlIndex(String jtlIndex) {
+        this.jtlIndex = jtlIndex;
+    }
+
+    public String getJabt() {
+        return jabt;
+    }
+
+    public void setJabt(String jabt) {
+        this.jabt = jabt;
+    }
+
+    public String getIssn9() {
+        return issn9;
+    }
+
+    public void setIssn9(String issn9) {
+        this.issn9 = issn9;
+    }
+
+    public String getIssn8() {
+        return issn8;
+    }
+
+    public void setIssn8(String issn8) {
+        this.issn8 = issn8;
+    }
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
+    public String getIssue() {
+        return issue;
+    }
+
+    public void setIssue(String issue) {
+        this.issue = issue;
+    }
+
+    public void setCdPub(String cdPub) {
+        this.cdPub = cdPub;
+    }
+
+    public String getPubStatus() {
+        return pubStatus;
+    }
+
+    public void setPubStatus(String pubStatus) {
+        this.pubStatus = pubStatus;
+    }
+
+    public String getCateg() {
+        return categ;
+    }
+
+    public void setCateg(String categ) {
+        this.categ = categ;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public Integer getPpct() {
+        return ppct;
+    }
+
+    public void setPpct(Integer ppct) {
+        this.ppct = ppct;
+    }
+
+    public String getPpf() {
+        return ppf;
+    }
+
+    public void setPpf(String ppf) {
+        this.ppf = ppf;
+    }
+
+    public String getPpl() {
+        return ppl;
+    }
+
+    public void setPpl(String ppl) {
+        this.ppl = ppl;
+    }
+
+    public void setAtlSort(String atlSort) {
+        this.atlSort = atlSort;
+    }
+
+    public void setAtlIndex(String atlIndex) {
+        this.atlIndex = atlIndex;
+    }
+
+    public String getAbst() {
+        return abst;
+    }
+
+    public void setAbst(String abst) {
+        this.abst = abst;
+    }
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public Integer getPaperFlag() {
+        return paperFlag;
+    }
+
+    public void setPaperFlag(Integer paperFlag) {
+        this.paperFlag = paperFlag;
+    }
+
+    public Integer getAbsFlag() {
+        return absFlag;
+    }
+
+    public void setAbsFlag(Integer absFlag) {
+        this.absFlag = absFlag;
+    }
+
+    public String getOriContent() {
+        return oriContent;
+    }
+
+    public void setOriContent(String oriContent) {
+        this.oriContent = oriContent;
+    }
+
     public String getAtl() {
         return atl;
     }
@@ -160,19 +346,19 @@ public class Article {
         this.pubDate = year + month;
     }
 
-    public static void main(String [] args) throws ParseException {
+   /* public static void main(String [] args) throws ParseException {
         Article article = new Article();
         article.setPubDate("2019", "12", "28");
         System.out.println(article.pubDate);
 
-        /*SimpleDateFormat fo = new SimpleDateFormat("yyyyMMdd");
-        String format = fo.format(fo.parse("00000000"));*/
+        *//*SimpleDateFormat fo = new SimpleDateFormat("yyyyMMdd");
+        String format = fo.format(fo.parse("00000000"));*//*
 
-    }
+    }*/
 }
-
+/*
 class PubDate {
 
     private String pubStatus;
     private String Year;
-}
+}*/

@@ -1,7 +1,9 @@
 package com.cnebula.nature.util;
 
 import com.cnebula.nature.ThreadTask.ParseXMLRunableImpl;
+import com.cnebula.nature.configuration.HibernateConfiguration;
 import com.cnebula.nature.dto.Article;
+import com.cnebula.nature.entity.Configuration;
 import com.cnebula.nature.entity.FileNameEntity;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -11,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.hibernate.SessionFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -85,9 +88,10 @@ public class ExtractZipUtil {
         LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<Runnable>(taskNum);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(cpu, cpu, 200, TimeUnit.SECONDS, lbq);
 
+        SessionFactory sessionFactory = HibernateConfiguration.getSessionFactory(Configuration.getProperties());
         // Parse XML then check duplication of Article
         for (List<String> fileNameIssue:fileNames){
-            threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue, baseDir));
+            threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue, Configuration.getProperties(), sessionFactory));
         }
 
         threadPoolExecutor.shutdown();
@@ -104,10 +108,10 @@ public class ExtractZipUtil {
         unZip(new File(zipfile), baseDir);
     }
 
-    /*public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         unZip("/home/jihe/developFiles/nature/ftp_PUB_19-04-06_05-50-17.zip", "/home/jihe/developFiles/nature");
         //System.out.println(names);
         //Article article = new Article();
         //article.
-    }*/
+    }
 }

@@ -40,7 +40,7 @@ public class AppMain {
         properties.load(fileInputStream);
 
         // =========Store configuration to internal inner memory===========
-        Configuration configuration = new Configuration(properties);
+        Configuration.setProperties(properties);
 
         try {
             ExtractZipUtil.unZip(properties.getProperty("zipFileDir"), properties.getProperty("pdfBaseDir"));
