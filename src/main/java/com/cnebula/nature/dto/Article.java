@@ -1,6 +1,8 @@
 package com.cnebula.nature.dto;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,7 +10,9 @@ import javax.persistence.*;
 public class Article {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "artid")
+    @GenericGenerator(name = "artid", strategy = "increment")
     @Column(name = "artid", nullable = false)
     private Integer artid; //Primary key
 
@@ -16,10 +20,10 @@ public class Article {
     @Column(name = "pips", nullable = true)
     private String pips; //全文文件名称,即pdf扩展后缀名.之前的名称
 
-    @Column(name = "pii", nullable = true, insertable = false, updatable = false)
+    @Column(name = "pii", nullable = true)
     private String pii; // 电子资源唯一标示
 
-    @Column(name = "pii", nullable = true)
+    @Column(name = "doi", nullable = true)
     private String doi; // 电子资源唯一标示
 
     @Column(name = "pnm", nullable = true)
@@ -50,10 +54,10 @@ public class Article {
     private String issue; //期号
 
     @Column(name = "cd", nullable = true)
-    private String pubDate; //出版日期
+    private String pubDate = ""; //出版日期
 
     @Column(name = "cd_pub", nullable = true)
-    private String cdPub;
+    private String cdPub = "";
 
     @Column(name = "pubstatus", nullable = true)
     private String pubStatus;
@@ -343,7 +347,13 @@ public class Article {
         if (!StringUtils.isEmpty(month)) {
             if (month.length() == 1) month = "0" + month;
         }
-        this.pubDate = year + month;
+        if (!StringUtils.isEmpty(day)) {
+            if (day.length() == 1) day = "0" + day;
+        }
+        if (year != null) this.pubDate += year;
+        if (month != null) this.pubDate += month;
+        if (day != null) this.pubDate += day;
+        this.cdPub = this.pubDate;
     }
 
    /* public static void main(String [] args) throws ParseException {

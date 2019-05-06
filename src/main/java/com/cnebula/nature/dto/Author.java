@@ -1,6 +1,7 @@
 package com.cnebula.nature.dto;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -10,7 +11,9 @@ import javax.persistence.*;
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "aid")
+    @GenericGenerator(name = "aid", strategy = "increment")
     @Column(name = "aid", nullable = false)
     private Integer aid;
 

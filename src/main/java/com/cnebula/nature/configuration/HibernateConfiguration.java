@@ -41,6 +41,9 @@ public class HibernateConfiguration {
         Properties properties = new Properties();
         InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream("hibernate.properties");
         properties.load(systemResourceAsStream);
+        properties.setProperty("hibernate.connection.url", "jdbc:sqlserver://" + p.getProperty("dbHost", "localhost:1433") + ";DatabaseName=" + p.getProperty("dbName", "nature"));
+        properties.setProperty("hibernate.connection.username", p.getProperty("username", "sa"));
+        properties.setProperty("hibernate.connection.password", p.getProperty("password", "sqlserver"));
         //properties.load(new FileInputStream("/hibernate.properties"));
         //1.加载hibernate.cfg.xml配置
         Configuration config=new Configuration().setProperties(properties)

@@ -1,6 +1,7 @@
 package com.cnebula.nature.dto;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -10,7 +11,9 @@ import javax.persistence.*;
 public class AuthAff {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "au_affid")
+    @GenericGenerator(name = "au_affid", strategy = "increment")
     @Column(name = "au_affid", nullable = false)
     private Integer auAffid;
 

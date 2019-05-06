@@ -1,16 +1,19 @@
 package com.cnebula.nature.dto;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "nature.dbo.content")
+@Table(name = "nature.dbo.aff")
 public class Affiliation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "affid")
+    @GenericGenerator(name = "affid", strategy = "increment")
     @Column(name = "affid", nullable = false)
     private Integer affid;
 

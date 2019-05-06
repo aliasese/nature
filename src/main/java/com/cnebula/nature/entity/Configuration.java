@@ -7,7 +7,7 @@ import java.util.Properties;
  */
 public class Configuration {
 
-    private static Properties properties;
+    public static Properties properties = null;
 
     public Configuration() {
     }
@@ -20,7 +20,13 @@ public class Configuration {
         return properties;
     }
 
-    public static void setProperties(Properties properties) {
-        properties = properties;
+    public static void setProperties(Properties p) {
+        if (properties == null) {
+            synchronized (Configuration.class) {
+                if (properties == null) {
+                    properties = p;
+                }
+            }
+        }
     }
 }

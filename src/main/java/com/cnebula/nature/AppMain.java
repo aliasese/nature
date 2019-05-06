@@ -2,17 +2,16 @@ package com.cnebula.nature;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
+import com.cnebula.nature.configuration.DefaultConfiguration;
 import com.cnebula.nature.entity.Configuration;
 import com.cnebula.nature.util.DruidUtil;
 import com.cnebula.nature.util.ExtractZipUtil;
 import com.cnebula.nature.util.PropertiesUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -30,12 +29,17 @@ public class AppMain {
         log.info("Begin to read configuration file from file system: " + userDir);
         File file = null;
         try {
-            file = new File(userDir + File.separator + "config.properties");
+            file = new File(DefaultConfiguration.CONFIG);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Fail to read config.properties, caused: " + e.getLocalizedMessage(), e);
         }
-        FileInputStream fileInputStream = new FileInputStream(file);
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         Properties properties = new Properties();
         properties.load(fileInputStream);
 
@@ -43,10 +47,14 @@ public class AppMain {
         Configuration.setProperties(properties);
 
         try {
-            ExtractZipUtil.unZip(properties.getProperty("zipFileDir"), properties.getProperty("pdfBaseDir"));
+            String zipFileDir = !StringUtils.isEmpty(properties.getProperty("zipFileDir")) ? properties.getProperty("zipFileDir") : DefaultConfiguration.ZIP;
+            String pdfBaseDir = !StringUtils.isEmpty(properties.getProperty("pdfBaseDir")) ? properties.getProperty("pdfBaseDir") : DefaultConfiguration.PDFBASE;
+            ExtractZipUtil.unZip(zipFileDir, pdfBaseDir);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Error to parse zip, caused: " + e.getLocalizedMessage(), e);
+        } finally {
+            System.exit(1);
         }
 
 

@@ -9,6 +9,7 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
@@ -116,7 +117,7 @@ public class ExtractZip {
      * @return 返回 zip 压缩文件里的文件名的 list
      * @throws Exception
      */
-    /*public static List<String> unZip(File zipFile, String destDir) throws Exception {
+    public static List<String> unZip(File zipFile, String destDir) throws Exception {
         // 如果 destDir 为 null, 空字符串, 或者全是空格, 则解压到压缩文件所在目录
         if (StringUtils.isBlank(destDir)) {
             destDir = zipFile.getParent();
@@ -130,7 +131,7 @@ public class ExtractZip {
             is = new ZipArchiveInputStream(new BufferedInputStream(new FileInputStream(zipFile), BUFFER_SIZE));
             ZipArchiveEntry entry = null;
 
-            is.getNextEntry();
+            //is.getNextEntry();
             while ((entry = is.getNextZipEntry()) != null) {
                 fileNames.add(entry.getName());
 
@@ -146,8 +147,8 @@ public class ExtractZip {
                 }
                 //ips.
                 //entry.getExtra();
-                *//*File file = new File(destDir, entry.);
-                if ()*//*
+                //File file = new File(destDir, entry.);
+                //if ()
 
                 if (entry.isDirectory()) {
                     File directory = new File(destDir, entry.getName());
@@ -172,8 +173,38 @@ public class ExtractZip {
         }
 
         return fileNames;
-    }*/
+    }
 
+    public static void unZip3(File zipFile, String destDir) throws Exception {
+        ZipFile zf = new ZipFile(zipFile);
+        Enumeration<ZipArchiveEntry> entries = zf.getEntries();
+        while (entries.hasMoreElements()) {
+            ZipArchiveEntry ze = entries.nextElement();
+            InputStream is = zf.getInputStream(ze);
+            SAXReader sr = new SAXReader();
+            Document doc = null;
+            try {
+                doc = sr.read(is);
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+
+
+            Element rootElement = doc.getRootElement();
+            List<Element> list = rootElement.elements();
+            for (Element element : list) {
+                element.asXML();
+                element.getText();
+                System.out.println(element.asXML());
+                element.getData();
+                element.getStringValue();
+                element.getTextTrim();
+                element.toString();
+                element.getDocument().content().stream();
+                element.attributes();
+            }
+        }
+    }
     /**
      * 解压 zip 文件
      *
@@ -184,7 +215,7 @@ public class ExtractZip {
      */
     public static void unZip(String zipfile, String destDir) throws Exception {
         File zipFile = new File(zipfile);
-        unZip2(zipFile, destDir);
+        unZip3(zipFile, destDir);
     }
 
     public static void main(String[] args) throws Exception {
