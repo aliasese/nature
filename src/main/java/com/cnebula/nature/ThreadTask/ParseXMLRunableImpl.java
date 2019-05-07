@@ -55,6 +55,7 @@ public class ParseXMLRunableImpl implements Runnable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         System.out.println("===========");
         String jtlCode = null;
@@ -222,40 +223,63 @@ public class ParseXMLRunableImpl implements Runnable {
             Criteria cr = dc.getExecutableCriteria(session);
             List<Article> list = cr.list();
             for (int j = 0; j < list.size(); j++) {
-                Transaction transaction = session.beginTransaction();
+                //Transaction transaction = session.beginTransaction();
                 Article att = list.get(j);
-                Author auu = new Author();
-                Affiliation affiliation = new Affiliation();
-                affiliation.setArtid(att.getArtid());
-                auu.setArtid(att.getArtid());
 
-
-                String hqlSel = "FROM Author WHERE artid = :artid";
-                List<Author> auths = session.createQuery(hqlSel)
+                @SuppressWarnings("unchecked")
+                String hqlSelAff = "FROM Affiliation WHERE artid = :artid";
+                List<Affiliation> affs = session.createQuery(hqlSelAff)
                         .setParameter("artid", att.getArtid())
                         .getResultList();
 
-
-
-                String hql = "DELETE Author WHERE artid = :artid";
-                session.createQuery(hql)
+                @SuppressWarnings("unchecked")
+                String hqlSelAu = "FROM Author WHERE artid = :artid";
+                List<Author> auths = session.createQuery(hqlSelAu)
                         .setParameter("artid", att.getArtid())
-                        .executeUpdate();
+                        .getResultList();
 
-                session.delete(att);
-                session.delete(auu);
-                session.delete(affiliation);
-
-                AuthAff authAff = new AuthAff();
-                authAff.setAid(auu.getAid());
-                authAff.setAuAffid(affiliation.getAffid());
-
-                session.delete(authAff);
-                transaction.commit();
+                Transaction transaction = session.beginTransaction();
+                for (int k = 0; k < auths.size(); k++) {
+                    Author author = auths.get(k);
+                    //Session session1 = this.sessionFactory.openSession();
+                    //Transaction transaction = session1.beginTransaction();
+                    for (int l = 0; l < affs.size(); l++) {
+                        Affiliation aff = affs.get(l);
+                        Session session2 = this.sessionFactory.openSession();
+                        //Transaction transaction2 = session2.beginTransaction();
+                        String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
+                        List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
+                                .setParameter("aid", author.getAid())
+                                .setParameter("affid", aff.getAffid())
+                                .getResultList();
+                        //transaction2.commit();
+                        session2.close();
+                        for (int m = 0; m < authAffs.size(); m++) {
+                            AuthAff authAff = authAffs.get(m);
+                            session.delete(authAff);
+                        }
+                       /* String hqlDel = "DELETE AuthAff WHERE aid = :aid AND affid = :affid";
+                        int countDel = session1.createQuery(hqlDel).setParameter("aid", author.getAid())
+                                .setParameter("affid", aff.getAffid())
+                                .executeUpdate();*/
+                        //System.out.println("===============The count of deleted count of AuthAff: " + countDel);
+                        /*AuthAff authAff = new AuthAff();
+                        authAff.setAid(author.getAid());
+                        authAff.setAuAffid(aff.getAffid());
+                        session.delete(authAff);*/
+                        session.delete(aff);
+                    }
+                    session.delete(author);
+                    //transaction.commit();
+                }
+                //transaction.commit();
                 /*Session ss = this.sessionFactory.openSession();
                 ss.delete(att);
                 ss.delete();*/
+                session.delete(att);
+                transaction.commit();
             }
+
 
             Transaction transaction = session.beginTransaction();
             session.save(at);
