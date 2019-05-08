@@ -33,4 +33,5 @@
         <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />
     </root>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
 </configuration>

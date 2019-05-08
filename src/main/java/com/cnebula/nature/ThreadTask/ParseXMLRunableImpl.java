@@ -154,7 +154,12 @@ public class ParseXMLRunableImpl implements Runnable {
             at.setPpct(article.getInt("LastPage") - article.getInt("FirstPage") + 1);
             at.setPpf(String.valueOf(article.get("FirstPage")));
             at.setPpl(String.valueOf(article.get("LastPage")));
-            at.setAtl(article.getString("ArticleTitle"));
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&" + article.getString("ArticleTitle"));
+            try {
+                at.setAtl(new String(article.getString("ArticleTitle").getBytes(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             at.setAbst(article.getString("Abstract"));
             at.setFileSize(String.valueOf(byteCount));
             at.setAbsFlag(StringUtils.isEmpty(at.getAbst()) ? 0 : 1);
@@ -204,103 +209,96 @@ public class ParseXMLRunableImpl implements Runnable {
             }
 
             // Remove Duplicate
-            Session session = this.sessionFactory.openSession();
+            synchronized (ParseXMLRunableImpl.class) {
+                Session session = this.sessionFactory.openSession();
                 /*CriteriaBuilder cb = session.getCriteriaBuilder();
                 CriteriaQuery<Article> query = cb.createQuery(Article.class);
 
                 query.where((Predicate) Restrictions.eq("artid", 1));*/
-            //query.where();
-            DetachedCriteria dc = DetachedCriteria.forClass(Article.class);
-            //dc.add(Restrictions.eq("jtl", at.getJournalTitle()));
-            dc.add(Restrictions.eq("jabt", at.getJabt()));
-            dc.add(Restrictions.eq("issn9", at.getIssn9()));
-            dc.add(Restrictions.eq("volume", at.getVolume()));
-            dc.add(Restrictions.eq("issue", at.getIssue()));
-            dc.add(Restrictions.eq("atl", at.getAtl()));
-            dc.add(Restrictions.eq("ppf", at.getPpf()));
-            dc.add(Restrictions.eq("ppl", at.getPpl()));
+                //query.where();
+                DetachedCriteria dc = DetachedCriteria.forClass(Article.class);
+                //dc.add(Restrictions.eq("jtl", at.getJournalTitle()));
+                dc.add(Restrictions.eq("jabt", at.getJabt()));
+                dc.add(Restrictions.eq("issn8", at.getIssn8()));
+                dc.add(Restrictions.eq("volume", at.getVolume()));
+                dc.add(Restrictions.eq("issue", at.getIssue()));
+                dc.add(Restrictions.eq("atl", at.getAtl()));
+                dc.add(Restrictions.eq("ppf", at.getPpf()));
+                dc.add(Restrictions.eq("ppl", at.getPpl()));
 
-            Criteria cr = dc.getExecutableCriteria(session);
-            List<Article> list = cr.list();
-            for (int j = 0; j < list.size(); j++) {
-                //Transaction transaction = session.beginTransaction();
-                Article att = list.get(j);
+                Criteria cr = dc.getExecutableCriteria(session);
+                List<Article> list = cr.list();
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list.size() + dc.toString());
+                for (int j = 0; j < list.size(); j++) {
+                    //Transaction transaction = session.beginTransaction();
+                    Article att = list.get(j);
 
-                @SuppressWarnings("unchecked")
-                String hqlSelAff = "FROM Affiliation WHERE artid = :artid";
-                List<Affiliation> affs = session.createQuery(hqlSelAff)
-                        .setParameter("artid", att.getArtid())
-                        .getResultList();
+                    @SuppressWarnings("unchecked")
+                    String hqlSelAff = "FROM Affiliation WHERE artid = :artid";
+                    List<Affiliation> affs = session.createQuery(hqlSelAff)
+                            .setParameter("artid", att.getArtid())
+                            .getResultList();
 
-                @SuppressWarnings("unchecked")
-                String hqlSelAu = "FROM Author WHERE artid = :artid";
-                List<Author> auths = session.createQuery(hqlSelAu)
-                        .setParameter("artid", att.getArtid())
-                        .getResultList();
+                    @SuppressWarnings("unchecked")
+                    String hqlSelAu = "FROM Author WHERE artid = :artid";
+                    List<Author> auths = session.createQuery(hqlSelAu)
+                            .setParameter("artid", att.getArtid())
+                            .getResultList();
 
-                Transaction transaction = session.beginTransaction();
-                for (int k = 0; k < auths.size(); k++) {
-                    Author author = auths.get(k);
-                    //Session session1 = this.sessionFactory.openSession();
-                    //Transaction transaction = session1.beginTransaction();
-                    for (int l = 0; l < affs.size(); l++) {
-                        Affiliation aff = affs.get(l);
-                        Session session2 = this.sessionFactory.openSession();
-                        //Transaction transaction2 = session2.beginTransaction();
-                        String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
-                        List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
-                                .setParameter("aid", author.getAid())
-                                .setParameter("affid", aff.getAffid())
-                                .getResultList();
-                        //transaction2.commit();
-                        session2.close();
-                        for (int m = 0; m < authAffs.size(); m++) {
-                            AuthAff authAff = authAffs.get(m);
-                            session.delete(authAff);
+                    synchronized (ParseXMLRunableImpl.class) {
+                        Transaction transaction = session.beginTransaction();
+                        for (int k = 0; k < auths.size(); k++) {
+                            Author author = auths.get(k);
+                            //Session session1 = this.sessionFactory.openSession();
+                            //Transaction transaction = session1.beginTransaction();
+                            for (int l = 0; l < affs.size(); l++) {
+                                Affiliation aff = affs.get(l);
+                                Session session2 = this.sessionFactory.getCurrentSession();
+                                Transaction transaction2 = session2.beginTransaction();
+                                String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
+                                List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
+                                        .setParameter("aid", author.getAid())
+                                        .setParameter("affid", aff.getAffid())
+                                        .getResultList();
+                                transaction2.commit();
+                                session2.close();
+                                for (int m = 0; m < authAffs.size(); m++) {
+                                    AuthAff authAff = authAffs.get(m);
+                                    session.delete(authAff);
+                                }
+                                session.delete(aff);
+                            }
+                            session.delete(author);
+                            //transaction.commit();
                         }
-                       /* String hqlDel = "DELETE AuthAff WHERE aid = :aid AND affid = :affid";
-                        int countDel = session1.createQuery(hqlDel).setParameter("aid", author.getAid())
-                                .setParameter("affid", aff.getAffid())
-                                .executeUpdate();*/
-                        //System.out.println("===============The count of deleted count of AuthAff: " + countDel);
-                        /*AuthAff authAff = new AuthAff();
-                        authAff.setAid(author.getAid());
-                        authAff.setAuAffid(aff.getAffid());
-                        session.delete(authAff);*/
-                        session.delete(aff);
+                        session.delete(att);
+                        transaction.commit();
                     }
-                    session.delete(author);
-                    //transaction.commit();
                 }
-                //transaction.commit();
-                /*Session ss = this.sessionFactory.openSession();
-                ss.delete(att);
-                ss.delete();*/
-                session.delete(att);
+                session.close();
+
+                Session session1 = this.sessionFactory.openSession();
+                Transaction transaction = session1.beginTransaction();
+                session1.save(at);
+                for (int j = 0; j < authors.length(); j++) {
+                    Author author = (Author) authors.get(j);
+                    author.setArtid(at.getArtid());
+                    session1.save(author);
+                    for (int k = 0; k < affiliations.length(); k++) {
+                        Affiliation affiliation = (Affiliation) affiliations.get(k);
+                        affiliation.setArtid(at.getArtid());
+                        session1.save(affiliation);
+                        AuthAff authAff = new AuthAff();
+                        authAff.setAid(author.getAid());
+                        authAff.setAffid(affiliation.getAffid());
+                        session1.save(authAff);
+                    }
+                }
                 transaction.commit();
+
+                //session.flush();
+                session1.close();
             }
-
-
-            Transaction transaction = session.beginTransaction();
-            session.save(at);
-            for (int j = 0; j < authors.length(); j++) {
-                Author author = (Author) authors.get(j);
-                author.setArtid(at.getArtid());
-                session.save(author);
-                for (int k = 0; k < affiliations.length(); k++) {
-                    Affiliation affiliation = (Affiliation) affiliations.get(k);
-                    affiliation.setArtid(at.getArtid());
-                    session.save(affiliation);
-                    AuthAff authAff = new AuthAff();
-                    authAff.setAid(author.getAid());
-                    authAff.setAffid(affiliation.getAffid());
-                    session.save(authAff);
-                }
-            }
-            transaction.commit();
-
-            //session.flush();
-            session.close();
         }
 /*
         while (issueIt.hasNext()) {
