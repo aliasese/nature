@@ -4,9 +4,8 @@ import com.cnebula.nature.dto.Affiliation;
 import com.cnebula.nature.dto.Article;
 import com.cnebula.nature.dto.AuthAff;
 import com.cnebula.nature.dto.Author;
-import org.hibernate.Session;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.io.IOException;
@@ -15,11 +14,10 @@ import java.util.Properties;
 
 public class HibernateConfiguration {
 
-    //定义变量
-    //private static Configuration config;
-    //private static SessionFactory sessionFactory;
+    private final static Properties PROPERTIES = com.cnebula.nature.entity.Configuration.getProperties();
+    public static SessionFactory sessionFactory;
 
-    /*static {
+    static {
         Properties properties = new Properties();
         InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream("hibernate.properties");
         try {
@@ -27,24 +25,14 @@ public class HibernateConfiguration {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //properties.load(new FileInputStream("/hibernate.properties"));
-        //1.加载hibernate.cfg.xml配置
-        config=new Configuration().setProperties(properties)
-                //.addPackage("com.houshenglory.hibernate.dto")
-                .addAnnotatedClass(Article.class)
-                .configure();
-        //2.获取SessionFactory
-        sessionFactory=config.buildSessionFactory();
-    }*/
-
-    public static SessionFactory getSessionFactory(Properties p) throws IOException {
-        Properties properties = new Properties();
-        InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream("hibernate.properties");
-        properties.load(systemResourceAsStream);
-        properties.setProperty("hibernate.connection.url", "jdbc:sqlserver://" + p.getProperty("dbHost", "localhost:1433") + ";DatabaseName=" + p.getProperty("dbName", "nature"));
-        properties.setProperty("hibernate.connection.username", p.getProperty("username", "sa"));
-        properties.setProperty("hibernate.connection.password", p.getProperty("password", "sqlserver"));
-        //properties.load(new FileInputStream("/hibernate.properties"));
+        String dbHost = !StringUtils.isEmpty(PROPERTIES.getProperty("dbHost")) ? PROPERTIES.getProperty("dbHost") : DefaultConfiguration.DEFDBHOST;
+        String dbName = !StringUtils.isEmpty(PROPERTIES.getProperty("dbName")) ? PROPERTIES.getProperty("dbName") : DefaultConfiguration.DEFDBNAME;
+        String username = !StringUtils.isEmpty(PROPERTIES.getProperty("username")) ? PROPERTIES.getProperty("username") : DefaultConfiguration.DEFUSERNAME;
+        String password = !StringUtils.isEmpty(PROPERTIES.getProperty("password")) ? PROPERTIES.getProperty("password") : DefaultConfiguration.DEFPASSWORD;
+        properties.setProperty("url", "jdbc:sqlserver://" + dbHost + ";DatabaseName=" + dbName);
+        properties.setProperty("username", username);
+        properties.setProperty("password", password);
+        System.out.println("The real properties configurations will be injected to hibernate are: " + properties);
         //1.加载hibernate.cfg.xml配置
         Configuration config=new Configuration().setProperties(properties)
                 //.addPackage("com.houshenglory.hibernate.dto")
@@ -53,18 +41,6 @@ public class HibernateConfiguration {
                 .addAnnotatedClass(Affiliation.class)
                 .addAnnotatedClass(Article.class);
         //2.获取SessionFactory
-        return config.buildSessionFactory();
+        sessionFactory = config.buildSessionFactory();
     }
-
-    public static void main(String [] args) throws IOException {
-
-        SessionFactory sessionFactory = HibernateConfiguration.getSessionFactory(null);
-
-        Session session = sessionFactory.openSession();
-
-        Article article = session.get(Article.class, 1);
-
-        System.out.println(article);
-    }
-
 }

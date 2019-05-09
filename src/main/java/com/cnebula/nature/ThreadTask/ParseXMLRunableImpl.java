@@ -14,10 +14,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
@@ -40,24 +37,23 @@ public class ParseXMLRunableImpl implements Runnable {
     private ZipFile zipFile;
     private List<String> fileNameIssue;
     //private String baseDir;
-    private Properties properties;
-    private SessionFactory sessionFactory;
+    private static Properties properties;
+    //private SessionFactory sessionFactory;
 
     public ParseXMLRunableImpl() {
     }
 
-    public ParseXMLRunableImpl(ZipFile zipFile, List<String> fileNameIssue, Properties properties, SessionFactory sessionFactory) {
+    public ParseXMLRunableImpl(ZipFile zipFile, List<String> fileNameIssue, Properties properties) {
         this.zipFile = zipFile;
         this.fileNameIssue = fileNameIssue;
         //this.baseDir = baseDir;
         this.properties = properties;
-        this.sessionFactory = sessionFactory;
+        //this.sessionFactory = sessionFactory;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void run() {
-        System.out.println("===========");
         String jtlCode = null;
         JSONObject articleSetJson = null;
         List<Element> es = null;
@@ -210,7 +206,7 @@ public class ParseXMLRunableImpl implements Runnable {
 
             // Remove Duplicate
             synchronized (ParseXMLRunableImpl.class) {
-                Session session = this.sessionFactory.openSession();
+                Session session = HibernateConfiguration.sessionFactory.openSession();
                 /*CriteriaBuilder cb = session.getCriteriaBuilder();
                 CriteriaQuery<Article> query = cb.createQuery(Article.class);
 
@@ -247,91 +243,110 @@ public class ParseXMLRunableImpl implements Runnable {
 
                     synchronized (ParseXMLRunableImpl.class) {
                         Transaction transaction = session.beginTransaction();
-                        for (int k = 0; k < auths.size(); k++) {
-                            Author author = auths.get(k);
-                            //Session session1 = this.sessionFactory.openSession();
-                            //Transaction transaction = session1.beginTransaction();
-                            for (int l = 0; l < affs.size(); l++) {
-                                Affiliation aff = affs.get(l);
-                                Session session2 = this.sessionFactory.getCurrentSession();
-                                Transaction transaction2 = session2.beginTransaction();
-                                String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
-                                List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
-                                        .setParameter("aid", author.getAid())
-                                        .setParameter("affid", aff.getAffid())
-                                        .getResultList();
-                                transaction2.commit();
-                                session2.close();
-                                for (int m = 0; m < authAffs.size(); m++) {
-                                    AuthAff authAff = authAffs.get(m);
-                                    session.delete(authAff);
+                        try {
+                            for (int k = 0; k < auths.size(); k++) {
+                                Author author = auths.get(k);
+                                //Session session1 = this.sessionFactory.openSession();
+                                //Transaction transaction = session1.beginTransaction();
+                                for (int l = 0; l < affs.size(); l++) {
+                                    Affiliation aff = affs.get(l);
+                                    Session session2 = HibernateConfiguration.sessionFactory.getCurrentSession();
+                                    Transaction transaction2 = session2.beginTransaction();
+                                    String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
+                                    List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
+                                            .setParameter("aid", author.getAid())
+                                            .setParameter("affid", aff.getAffid())
+                                            .getResultList();
+                                    transaction2.commit();
+                                    //session2.close();
+                                    for (int m = 0; m < authAffs.size(); m++) {
+                                        AuthAff authAff = authAffs.get(m);
+                                        session.delete(authAff);
+                                    }
+                                    session.delete(aff);
                                 }
-                                session.delete(aff);
+                                session.delete(author);
+                                //transaction.commit();
                             }
-                            session.delete(author);
-                            //transaction.commit();
+                            session.delete(att);
+
+                            // Delete PDF of specific article
+                        /*String pdfBaseDir = properties.getProperty("pdfBaseDir");
+                        String pdfDirChild = att.getJabt() + att.getVolume() + att.getIssue() + att.getPips() + ".pdf";
+
+                        File file = new File(pdfBaseDir, pdfDirChild);
+                        if (file.exists()) {
+                            file.delete();
+                        }*/
+                            transaction.commit();
+                        } catch (RuntimeException e) {
+                            e.printStackTrace();
+                            transaction.rollback();
+                        } finally {
                         }
-                        session.delete(att);
-                        transaction.commit();
                     }
                 }
                 session.close();
 
-                Session session1 = this.sessionFactory.openSession();
-                Transaction transaction = session1.beginTransaction();
-                session1.save(at);
-                for (int j = 0; j < authors.length(); j++) {
-                    Author author = (Author) authors.get(j);
-                    author.setArtid(at.getArtid());
-                    session1.save(author);
-                    for (int k = 0; k < affiliations.length(); k++) {
-                        Affiliation affiliation = (Affiliation) affiliations.get(k);
-                        affiliation.setArtid(at.getArtid());
-                        session1.save(affiliation);
-                        AuthAff authAff = new AuthAff();
-                        authAff.setAid(author.getAid());
-                        authAff.setAffid(affiliation.getAffid());
-                        session1.save(authAff);
-                    }
-                }
-                transaction.commit();
 
-                //session.flush();
-                session1.close();
-            }
-        }
-/*
-        while (issueIt.hasNext()) {
-            String issueFileName = issueIt.next();
-            if (issueFileName.endsWith("xml")) {
-                InputStream ips = null;
+
+                Session session1 = HibernateConfiguration.sessionFactory.openSession();
+                Transaction transaction = session1.beginTransaction();
                 try {
-                    ips = zipFile.getInputStream(zipFile.getEntry(issueFileName));
+                    session1.save(at);
+
+                    // Store PDF to specific directory of file system
+                /*String pdfBaseDir = properties.getProperty("pdfBaseDir");
+                String pdfDirChild = at.getJabt() + at.getVolume() + at.getIssue();
+                File file = new File(pdfBaseDir, pdfDirChild);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+
+                BufferedOutputStream bos = null;
+                try {
+                    bos = new BufferedOutputStream(new FileOutputStream(at.getPpf().concat(".pdf"), false));
+                    byte[] bt = new byte[1024];
+                    int length = 0;
+                    while ((length = is.read(bt)) != -1) {
+                        bos.write(bt);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        bos.flush();
+                        bos.close();
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }*/
+
+                    for (int j = 0; j < authors.length(); j++) {
+                        Author author = (Author) authors.get(j);
+                        author.setArtid(at.getArtid());
+                        session1.save(author);
+                        for (int k = 0; k < affiliations.length(); k++) {
+                            Affiliation affiliation = (Affiliation) affiliations.get(k);
+                            affiliation.setArtid(at.getArtid());
+                            session1.save(affiliation);
+                            AuthAff authAff = new AuthAff();
+                            authAff.setAid(author.getAid());
+                            authAff.setAffid(affiliation.getAffid());
+                            session1.save(authAff);
+                        }
+                    }
+                    transaction.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    transaction.rollback();
+                } finally {
+                    session1.close();
                 }
-
-                JSONObject articleSetJson = XML.toJSONObject(new InputStreamReader(ips));
-                System.out.println(articleSetJson);
-
-                Session session = this.sessionFactory.openSession();
-                *//*CriteriaBuilder cb = session.getCriteriaBuilder();
-                CriteriaQuery<Article> query = cb.createQuery(Article.class);
-
-                query.where((Predicate) Restrictions.eq("artid", 1));*//*
-                //query.where();
-                DetachedCriteria dc = DetachedCriteria.forClass(Article.class);
-                dc.add(Restrictions.eq("artid", 1));
-
-                Criteria cr = dc.getExecutableCriteria(session);
-                List list = cr.list();
-
-                System.out.println(list);
-
-
-            } else {
-
             }
-        }*/
+        }
     }
 }

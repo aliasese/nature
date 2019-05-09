@@ -23,6 +23,10 @@ public class AppMain {
     private final static Logger log = LoggerFactory.getLogger(AppMain.class);
 
     public static void main(String[] agrs) throws IOException {
+        log.debug("Processing trade with id: {} and symbol : {} ", 100000000, "pku");
+        log.debug("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        log.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         log.info("=======================================Begin=====================================");
         log.info("Main thread begin to start for 'Nature data importing tool'");
         String userDir = System.getProperty("user.dir");

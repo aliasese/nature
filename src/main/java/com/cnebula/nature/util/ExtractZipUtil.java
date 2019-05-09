@@ -114,10 +114,13 @@ public class ExtractZipUtil {
         LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<Runnable>(fileNames.size());
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(cpu, cpu, 200, TimeUnit.SECONDS, lbq);
 
-        SessionFactory sessionFactory = HibernateConfiguration.getSessionFactory(Configuration.getProperties());
+        //String name = HibernateConfiguration.class.getName();
+        //System.out.println(name);
+        Class.forName(HibernateConfiguration.class.getName(), true, HibernateConfiguration.class.getClassLoader());
+        //SessionFactory sessionFactory = HibernateConfiguration.sessionFactory;
         // Parse XML then check duplication of Article
         for (List<String> fileNameIssue:fileNames){
-            threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue, Configuration.getProperties(), sessionFactory));
+            threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue, Configuration.getProperties()));
         }
 
         threadPoolExecutor.shutdown();
