@@ -14,4 +14,11 @@ public class DefaultConfiguration {
     public static final String DEFUSERNAME = "sa";
     public static final String DEFPASSWORD = "sqlserver";
 
+    public static final String NAME_DBHOST = "dbHost";
+    public static final String NAME_DBNAME = "dbName";
+    public static final String NAME_USERNAME = "username";
+    public static final String NAME_PASSWORD = "password";
+    public static final String NAME_ZIPFILEDIR = "zipFileDir";
+    public static final String NAME_PDFBASEDIR = "pdfBaseDir";
+
 }
