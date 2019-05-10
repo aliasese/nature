@@ -6,6 +6,7 @@ import com.cnebula.nature.configuration.HibernateConfiguration;
 import com.cnebula.nature.dto.Article;
 import com.cnebula.nature.entity.Configuration;
 import com.cnebula.nature.entity.FileNameEntity;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -17,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import java.io.*;
@@ -35,8 +37,8 @@ public class ExtractZipUtil {
     private static XSSFSheet sheet = null;
 
     static {
-        String localSiteInfoXML = Configuration.getProperties().getProperty("localSiteInfoXML", DefaultConfiguration.LOCALSITEXML);
 
+        String localSiteInfoXML = Configuration.getProperties().getProperty(DefaultConfiguration.NAME_LOCALSITEINFOXML);
         FileInputStream inp = null;
         try {
             inp = new FileInputStream(localSiteInfoXML);
@@ -66,7 +68,7 @@ public class ExtractZipUtil {
         return slashMatcher.start();
     }
 
-    public static void unZip(File zipFile, String baseDir) throws Exception {
+    public static void unZip(File zipFile) throws Exception, RuntimeException {
 
         ZipFile zf = new ZipFile(zipFile);
         Enumeration<? extends ZipArchiveEntry> entries = zf.getEntries();
@@ -114,10 +116,13 @@ public class ExtractZipUtil {
         LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<Runnable>(fileNames.size());
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(cpu, cpu, 200, TimeUnit.SECONDS, lbq);
 
-        //String name = HibernateConfiguration.class.getName();
-        //System.out.println(name);
-        Class.forName(HibernateConfiguration.class.getName(), true, HibernateConfiguration.class.getClassLoader());
-        //SessionFactory sessionFactory = HibernateConfiguration.sessionFactory;
+        try {
+            Class.forName(HibernateConfiguration.class.getName(), true, HibernateConfiguration.class.getClassLoader());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
         // Parse XML then check duplication of Article
         for (List<String> fileNameIssue:fileNames){
             threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue, Configuration.getProperties()));
@@ -133,19 +138,11 @@ public class ExtractZipUtil {
     /**
      * 解压 zip 文件
      *
-     * @param zipfile zip 压缩文件的路径
      * @return 返回 zip 压缩文件里的文件名的 list
      * @throws Exception
      */
-    public static void unZip(String zipfile, String baseDir) throws Exception {
-        unZip(new File(zipfile), baseDir);
-    }
-
-    public static void main(String[] args) throws Exception {
-        unZip("/home/jihe/developFiles/nature/ftp_PUB_19-04-06_05-50-17.zip", "/home/jihe/developFiles/nature");
-        //System.out.println(names);
-        //Article article = new Article();
-        //article.
+    public static void unZip() throws Exception, RuntimeException {
+        unZip(new File(Configuration.getProperties().getProperty(DefaultConfiguration.NAME_ZIPFILEDIR)));
     }
 
     public static void getJtlFullName(Article article, String code) {

@@ -4,7 +4,9 @@ import com.cnebula.nature.dto.Affiliation;
 import com.cnebula.nature.dto.Article;
 import com.cnebula.nature.dto.AuthAff;
 import com.cnebula.nature.dto.Author;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -25,14 +27,10 @@ public class HibernateConfiguration {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String dbHost = !StringUtils.isEmpty(PROPERTIES.getProperty("dbHost")) ? PROPERTIES.getProperty("dbHost") : DefaultConfiguration.DEFDBHOST;
-        String dbName = !StringUtils.isEmpty(PROPERTIES.getProperty("dbName")) ? PROPERTIES.getProperty("dbName") : DefaultConfiguration.DEFDBNAME;
-        String username = !StringUtils.isEmpty(PROPERTIES.getProperty("username")) ? PROPERTIES.getProperty("username") : DefaultConfiguration.DEFUSERNAME;
-        String password = !StringUtils.isEmpty(PROPERTIES.getProperty("password")) ? PROPERTIES.getProperty("password") : DefaultConfiguration.DEFPASSWORD;
-        properties.setProperty("url", "jdbc:sqlserver://" + dbHost + ";DatabaseName=" + dbName);
-        properties.setProperty("username", username);
-        properties.setProperty("password", password);
-        System.out.println("The real properties configurations will be injected to hibernate are: " + properties);
+        properties.setProperty("url", "jdbc:sqlserver://" + PROPERTIES.getProperty("dbHost") + ";DatabaseName=" + PROPERTIES.getProperty("dbName"));
+        properties.setProperty("username", PROPERTIES.getProperty("username"));
+        properties.setProperty("password", PROPERTIES.getProperty("password"));
+        System.out.println("The real properties configurations will be injected to hibernate are: " + PROPERTIES);
         //1.加载hibernate.cfg.xml配置
         Configuration config=new Configuration().setProperties(properties)
                 //.addPackage("com.houshenglory.hibernate.dto")
@@ -41,6 +39,12 @@ public class HibernateConfiguration {
                 .addAnnotatedClass(Affiliation.class)
                 .addAnnotatedClass(Article.class);
         //2.获取SessionFactory
-        sessionFactory = config.buildSessionFactory();
+        try {
+            sessionFactory = config.buildSessionFactory();
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
+
 }

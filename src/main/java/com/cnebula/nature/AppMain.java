@@ -17,7 +17,9 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.function.BiFunction;
 
 public class AppMain {
 
@@ -45,21 +47,25 @@ public class AppMain {
         Properties properties = new Properties();
         properties.load(fileInputStream);
 
-        // Check necessary parameters read from external configuration file
+
+
+        // Check necessary parameters read from external configuration file.
         String attention = CheckParameterUtil.checkParameter(properties);
         if (attention != null) {
             log.error(attention);
             System.exit(1);
             return;
         }
+
+        // Reset all parameters in properties read from external configuration file in case there is null value.
+        CheckParameterUtil.resetProperties(properties);
+
         // =========Store configuration to internal inner memory===========
         Configuration.setProperties(properties);
 
         try {
-            String zipFileDir = !StringUtils.isEmpty(properties.getProperty("zipFileDir")) ? properties.getProperty("zipFileDir") : DefaultConfiguration.ZIP;
-            String pdfBaseDir = !StringUtils.isEmpty(properties.getProperty("pdfBaseDir")) ? properties.getProperty("pdfBaseDir") : DefaultConfiguration.PDFBASE;
-            ExtractZipUtil.unZip(zipFileDir, pdfBaseDir);
-        } catch (Exception e) {
+            ExtractZipUtil.unZip();
+        } catch (Throwable e) {
             e.printStackTrace();
             log.error("Error to parse zip, caused: " + e.getLocalizedMessage(), e);
         }
