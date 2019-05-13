@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ExtractZipUtil {
 
-    private static XSSFSheet sheet = null;
+    public static XSSFSheet sheet = null;
 
     static {
 

@@ -127,5 +127,5 @@
         <appender-ref ref="WARN" />
         <appender-ref ref="ERROR" />
     </root>
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="DEBUG"/>
 </configuration>

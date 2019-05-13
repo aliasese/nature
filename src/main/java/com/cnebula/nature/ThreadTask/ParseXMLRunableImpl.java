@@ -244,21 +244,23 @@ public class ParseXMLRunableImpl implements Runnable {
                                     //Transaction transaction = session1.beginTransaction();
                                     for (int l = 0; l < affs.size(); l++) {
                                         Affiliation aff = affs.get(l);
-                                        //Session session2 = HibernateConfiguration.sessionFactory.getCurrentSession();
-                                        //Transaction transaction2 = session2.beginTransaction();
-                                        String hqlDeleteBatch = "DELETE FROM AuthAff WHERE aid = :aid AND affid = :affid";
-                                        try {
-                                            session.createQuery(hqlDeleteBatch)
-                                                    .setParameter("aid", author.getAid())
-                                                    .setParameter("affid", aff.getAffid())
-                                                    .executeUpdate();
-                                            //transaction2.commit();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            //transaction2.rollback();
-                                        }/* finally {
-                                            session2.close();
-                                        }*/
+                                        synchronized (ParseXMLRunableImpl.class) {
+                                            Session session2 = HibernateConfiguration.sessionFactory.getCurrentSession();
+                                            Transaction transaction2 = session2.beginTransaction();
+                                            String hqlDeleteBatch = "DELETE FROM AuthAff WHERE aid = :aid AND affid = :affid";
+                                            try {
+                                                session2.createQuery(hqlDeleteBatch)
+                                                        .setParameter("aid", author.getAid())
+                                                        .setParameter("affid", aff.getAffid())
+                                                        .executeUpdate();
+                                                transaction2.commit();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                transaction2.rollback();
+                                            } finally {
+                                                session2.close();
+                                            }
+                                        }
                                         /*String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
                                         List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
                                                 .setParameter("aid", author.getAid())

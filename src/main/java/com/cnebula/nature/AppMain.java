@@ -3,6 +3,7 @@ package com.cnebula.nature;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.cnebula.nature.configuration.DefaultConfiguration;
+import com.cnebula.nature.configuration.HibernateConfiguration;
 import com.cnebula.nature.entity.Configuration;
 import com.cnebula.nature.util.CheckParameterUtil;
 import com.cnebula.nature.util.DruidUtil;
@@ -68,6 +69,9 @@ public class AppMain {
         } catch (Throwable e) {
             e.printStackTrace();
             log.error("Error to parse zip, caused: " + e.getLocalizedMessage(), e);
+        } finally {
+            HibernateConfiguration.sessionFactory = null;
+            ExtractZipUtil.sheet = null;
         }
 
         log.info("=======================================Success=======================================");
