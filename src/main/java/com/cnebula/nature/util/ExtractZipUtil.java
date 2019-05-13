@@ -56,7 +56,10 @@ public class ExtractZipUtil {
         sheet = sheets.getSheetAt(0);
     }
 
-    private static int getFromIndex(String fullPath, String str,Integer count) {
+    /*private static int getFromIndex(String fullPath, String str,Integer count) {
+        System.out.println(str);
+        str = str.contains("\\") ? str += "\\" : str;
+        System.out.println(str);
         Matcher slashMatcher = Pattern.compile(str).matcher(fullPath);
         int index = 0;
         while(slashMatcher.find()) {
@@ -65,8 +68,8 @@ public class ExtractZipUtil {
                 break;
             }
         }
-        return slashMatcher.start();
-    }
+        return index;
+    }*/
 
     public static void unZip(File zipFile) throws Exception, RuntimeException {
 
@@ -82,7 +85,8 @@ public class ExtractZipUtil {
         while (entries.hasMoreElements()) {
             ZipArchiveEntry entry = entries.nextElement();
             String fullName = entry.getName();
-            String directPath = fullName.substring(0, getFromIndex(fullName, File.separator, 3));
+            //String directPath = fullName.substring(0, getFromIndex(fullName, File.separator, 3));
+            String directPath = fullName.substring(0, StringUtils.ordinalIndexOf(fullName, File.separator, 3));
 
             if (firstDirectPath == null) {
                 firstDirectPath = directPath;
