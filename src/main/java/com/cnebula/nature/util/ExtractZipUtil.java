@@ -6,31 +6,23 @@ import com.cnebula.nature.configuration.HibernateConfiguration;
 import com.cnebula.nature.dto.Article;
 import com.cnebula.nature.entity.Configuration;
 import com.cnebula.nature.entity.FileNameEntity;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ExtractZipUtil {
 
@@ -86,7 +78,7 @@ public class ExtractZipUtil {
             ZipArchiveEntry entry = entries.nextElement();
             String fullName = entry.getName();
             //String directPath = fullName.substring(0, getFromIndex(fullName, File.separator, 3));
-            String directPath = fullName.substring(0, StringUtils.ordinalIndexOf(fullName, File.separator, 3));
+            String directPath = fullName.substring(0, StringUtils.ordinalIndexOf(fullName, "/", 3));
 
             if (firstDirectPath == null) {
                 firstDirectPath = directPath;

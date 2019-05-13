@@ -54,7 +54,7 @@ public class ParseXMLRunableImpl implements Runnable {
             Iterator<String> issueIt = fileNameIssue.iterator();
             while (issueIt.hasNext()) {
                 String issueFileName = issueIt.next();
-                jtlCode = issueFileName.substring(0, issueFileName.indexOf(File.separator)).split("=")[1];
+                jtlCode = issueFileName.substring(0, issueFileName.indexOf("/")).split("=")[1];
                 if (issueFileName.endsWith("xml")) {
                     InputStream ips = null;
                     try {
