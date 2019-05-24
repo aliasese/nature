@@ -16,11 +16,17 @@ import org.dom4j.io.SAXReader;
 import org.hibernate.*;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.query.NativeQuery;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import java.io.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -201,101 +207,36 @@ public class ParseXMLRunableImpl implements Runnable {
                 // Remove Duplicate
                 synchronized (ParseXMLRunableImpl.class) {
                     Session session = HibernateConfiguration.sessionFactory.openSession();
-                    /*CriteriaBuilder cb = session.getCriteriaBuilder();
-                    CriteriaQuery<Article> query = cb.createQuery(Article.class);
+                    //Transaction transaction1 = session.beginTransaction();
 
-                    query.where((Predicate) Restrictions.eq("artid", 1));*/
-                    //query.where();
-                    DetachedCriteria dc = DetachedCriteria.forClass(Article.class);
-                    //dc.add(Restrictions.eq("jtl", at.getJournalTitle()));
-                    dc.add(Restrictions.eq("jabt", at.getJabt()));
-                    dc.add(Restrictions.eq("issn8", at.getIssn8()));
-                    dc.add(Restrictions.eq("volume", at.getVolume()));
-                    dc.add(Restrictions.eq("issue", at.getIssue()));
-                    dc.add(Restrictions.eq("atl", at.getAtl()));
-                    dc.add(Restrictions.eq("ppf", at.getPpf()));
-                    dc.add(Restrictions.eq("ppl", at.getPpl()));
-
-                    Criteria cr = dc.getExecutableCriteria(session);
-                    List<Article> list = cr.list();
-                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list.size() + dc.toString());
-                    for (int j = 0; j < list.size(); j++) {
-                        //Transaction transaction = session.beginTransaction();
-                        Article att = list.get(j);
-
-                        @SuppressWarnings("unchecked")
-                        String hqlSelAff = "FROM Affiliation WHERE artid = :artid";
-                        List<Affiliation> affs = session.createQuery(hqlSelAff)
-                                .setParameter("artid", att.getArtid())
-                                .getResultList();
-
-                        @SuppressWarnings("unchecked")
-                        String hqlSelAu = "FROM Author WHERE artid = :artid";
-                        List<Author> auths = session.createQuery(hqlSelAu)
-                                .setParameter("artid", att.getArtid())
-                                .getResultList();
-
-                        synchronized (ParseXMLRunableImpl.class) {
-                            Transaction transaction = session.beginTransaction();
-                            try {
-                                for (int k = 0; k < auths.size(); k++) {
-                                    Author author = auths.get(k);
-                                    //Session session1 = this.sessionFactory.openSession();
-                                    //Transaction transaction = session1.beginTransaction();
-                                    for (int l = 0; l < affs.size(); l++) {
-                                        Affiliation aff = affs.get(l);
-                                        synchronized (ParseXMLRunableImpl.class) {
-                                            Session session2 = HibernateConfiguration.sessionFactory.getCurrentSession();
-                                            Transaction transaction2 = session2.beginTransaction();
-                                            String hqlDeleteBatch = "DELETE FROM AuthAff WHERE aid = :aid AND affid = :affid";
-                                            try {
-                                                session2.createQuery(hqlDeleteBatch)
-                                                        .setParameter("aid", author.getAid())
-                                                        .setParameter("affid", aff.getAffid())
-                                                        .executeUpdate();
-                                                transaction2.commit();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                transaction2.rollback();
-                                            } finally {
-                                                session2.close();
-                                            }
-                                        }
-                                        /*String hqlSelAuthAff = "FROM AuthAff WHERE aid = :aid AND affid = :affid";
-                                        List<AuthAff> authAffs = session2.createQuery(hqlSelAuthAff)
-                                                .setParameter("aid", author.getAid())
-                                                .setParameter("affid", aff.getAffid())
-                                                .getResultList();
-                                        transaction2.commit();
-                                        //session2.close();
-                                        for (int m = 0; m < authAffs.size(); m++) {
-                                            AuthAff authAff = authAffs.get(m);
-                                            session.delete(authAff);
-                                        }*/
-                                        session.delete(aff);
-                                    }
-                                    session.delete(author);
-                                    //transaction.commit();
-                                }
-                                session.delete(att);
-
-                                // Delete PDF of specific article
-                            /*String pdfBaseDir = properties.getProperty(DefaultConfiguration.NAME_PDFBASEDIR);
-                            String pdfDirChild = att.getJabt() + att.getVolume() + att.getIssue() + att.getPips() + ".pdf";
-
-                            File file = new File(pdfBaseDir, pdfDirChild);
-                            if (file.exists()) {
-                                file.delete();
-                            }*/
-                                transaction.commit();
-                            } catch (RuntimeException e) {
-                                e.printStackTrace();
-                                transaction.rollback();
-                            } finally {
+                    try {
+                        Object o = session.doReturningWork(new ReturningWork<Object>() {
+                            @Override
+                            public Object execute(Connection connection) throws SQLException {
+                                CallableStatement cs = connection.prepareCall("{Call pc_remove_duplication(?,?,?,?,?,?,?)}");
+                                cs.setString(1, at.getJabt());
+                                cs.setString(2, at.getIssn8());
+                                cs.setInt(3, Integer.valueOf(at.getVolume()));
+                                cs.setInt(4, Integer.valueOf(at.getIssue()));
+                                cs.setString(5, at.getAtl());
+                                cs.setInt(6, Integer.valueOf(at.getPpf()));
+                                cs.setInt(7, Integer.valueOf(at.getPpl()));
+                                return cs.executeUpdate();
+                                //return null;
                             }
-                        }
+                        });
+                    } finally {
+                        session.close();
                     }
-                    session.close();
+
+                    // Delete PDF of specific article
+                    /*String pdfBaseDir = properties.getProperty(DefaultConfiguration.NAME_PDFBASEDIR);
+                    String pdfDirChild = att.getJabt() + File.separator + att.getVolume() + File.separator + att.getIssue() + File.separator + att.getPips() + ".pdf";
+
+                    File file = new File(pdfBaseDir, pdfDirChild);
+                    if (file.exists()) {
+                        file.delete();
+                    }*/
 
 
 
@@ -306,7 +247,7 @@ public class ParseXMLRunableImpl implements Runnable {
 
                         // Store PDF to specific directory of file system
                     /*String pdfBaseDir = properties.getProperty(DefaultConfiguration.NAME_PDFBASEDIR);
-                    String pdfDirChild = at.getJabt() + at.getVolume() + at.getIssue();
+                    String pdfDirChild = at.getJabt() + File.separator + at.getVolume() + File.separator + at.getIssue();
                     File file = new File(pdfBaseDir, pdfDirChild);
                     if (!file.exists()) {
                         file.mkdirs();
@@ -319,6 +260,7 @@ public class ParseXMLRunableImpl implements Runnable {
                         int length = 0;
                         while ((length = is.read(bt)) != -1) {
                             bos.write(bt);
+                            bos.flush();
                         }
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -326,7 +268,6 @@ public class ParseXMLRunableImpl implements Runnable {
                         e.printStackTrace();
                     } finally {
                         try {
-                            bos.flush();
                             bos.close();
                             is.close();
                         } catch (IOException e) {

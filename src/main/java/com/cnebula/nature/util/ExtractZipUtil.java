@@ -119,6 +119,15 @@ public class ExtractZipUtil {
             throw new RuntimeException(e);
         }
 
+        // Init PROCEDURE of SQLServer, then the process of removing duplication will use it.
+        HibernateConfiguration.sessionFactory.openSession().doWork(connection -> {
+            try {
+                DBUtil.initDB(connection);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         // Parse XML then check duplication of Article
         for (List<String> fileNameIssue:fileNames){
             threadPoolExecutor.execute(new ParseXMLRunableImpl(zf, fileNameIssue, Configuration.getProperties()));
